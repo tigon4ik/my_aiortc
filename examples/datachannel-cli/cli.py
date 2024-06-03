@@ -21,6 +21,7 @@ async def consume_signaling(pc, signaling):
         obj = await signaling.receive()
 
         if isinstance(obj, RTCSessionDescription):
+            print("session description received")
             await pc.setRemoteDescription(obj)
 
             if obj.type == "offer":
@@ -28,6 +29,7 @@ async def consume_signaling(pc, signaling):
                 await pc.setLocalDescription(await pc.createAnswer())
                 await signaling.send(pc.localDescription)
         elif isinstance(obj, RTCIceCandidate):
+            print("ice candidate received")
             await pc.addIceCandidate(obj)
         elif obj is BYE:
             print("Exiting")
